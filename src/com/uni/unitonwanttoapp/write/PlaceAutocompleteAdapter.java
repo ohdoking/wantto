@@ -176,8 +176,9 @@ public class PlaceAutocompleteAdapter
             // Confirm that the query completed successfully, otherwise return null
             final Status status = autocompletePredictions.getStatus();
             if (!status.isSuccess()) {
-                Toast.makeText(getContext(), "Error contacting API: " + status.toString(),
-                        Toast.LENGTH_SHORT).show();
+            	
+//                Toast.makeText(getContext(), "Error contacting API: " + status.toString(),
+//                        Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Error getting autocomplete prediction API call: " + status.toString());
                 autocompletePredictions.release();
                 return null;
@@ -193,9 +194,15 @@ public class PlaceAutocompleteAdapter
             ArrayList resultList = new ArrayList<Object>(autocompletePredictions.getCount());
             while (iterator.hasNext()) {
                 AutocompletePrediction prediction = iterator.next();
-                // Get the details of this prediction and copy it into a new PlaceAutocomplete object.
+                
+                if(getConcisePrediction(prediction.getDescription()).length()==0)
+                	continue;
+                
                 resultList.add(new PlaceAutocomplete(prediction.getPlaceId(),
-                        prediction.getDescription()));
+                			getConcisePrediction(prediction.getDescription())));
+                // Get the details of this prediction and copy it into a new PlaceAutocomplete object.
+//                resultList.add(new PlaceAutocomplete(prediction.getPlaceId(),
+                        //prediction.getDescription()));
             }
 
             // Release the buffer now that all data has been copied.
@@ -224,5 +231,19 @@ public class PlaceAutocompleteAdapter
         public String toString() {
             return description.toString();
         }
+    }
+    
+    public String getConcisePrediction(String place) {
+    	
+    	String [] address_tokens = place.split(" ");
+    	
+    	StringBuffer buffer = new StringBuffer();
+    	
+    	for (int i = 2; i < address_tokens.length; i++) {
+    		
+    		buffer.append(address_tokens[i] + " ");
+    	}
+    	
+    	return buffer.toString();
     }
 }

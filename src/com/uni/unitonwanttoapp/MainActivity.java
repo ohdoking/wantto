@@ -4,21 +4,27 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
-
-import com.uni.unitonwanttoapp.db.MyDB;
-import com.uni.unitonwanttoapp.db.MySQLiteHelper;
-import com.uni.unitonwanttoapp.dto.Dream;
 
 public class MainActivity extends Activity {
 
 	private SQLiteDatabase database; 
+	
+	final int ONE = 0;
+    final int TWO = 1;
+    final int THREE = 2;
+    final int FOUR = 3;
+    final int FIVE = 4;
+    final int SIX = 5;
+    final int SEVEN = 6;
+    final int EIGHT = 7;
+    final int NINE = 8;
+    final int TEN = 9;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,19 +76,27 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+ 
+        return super.onCreateOptionsMenu(menu);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+	/**
+     * On selecting action bar icons
+     * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+        case R.id.action_search:
+            // search action
+            return true;
+        case R.id.action_location_found:
+            // location found
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.uni.unitonwanttoapp.write;
+package com.uni.unitonwanttoapp;
 
 /*
  * Copyright (C) 2015 Google Inc. All Rights Reserved.
@@ -29,6 +29,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -43,18 +52,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.uni.unitonwanttoapp.R;
 import com.uni.unitonwanttoapp.activities.SampleActivityBase;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.Toast;
-import android.widget.ToggleButton;
+import com.uni.unitonwanttoapp.write.PlaceAutocompleteAdapter;
 
 public class WriteActivity extends SampleActivityBase implements OnClickListener,GoogleApiClient.OnConnectionFailedListener {
 	

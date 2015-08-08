@@ -5,14 +5,32 @@ public class Dream {
 	Integer id;
 	String zone;
 	String todo;	
-	float lat;
-	float lon;
+	double lat;
+	double lon;
 	String location;
 	String memo;
 	String category;
-	boolean check;
-	boolean noti;
+	Integer check;
+	Integer noti;
 	
+	public Dream(){
+		
+	}
+	public Dream(Integer id, String zone, String todo, double lat, double lon,
+			String location, String memo, String category, Integer check,
+			Integer noti) {
+		super();
+		this.id = id;
+		this.zone = zone;
+		this.todo = todo;
+		this.lat = lat;
+		this.lon = lon;
+		this.location = location;
+		this.memo = memo;
+		this.category = category;
+		this.check = check;
+		this.noti = noti;
+	}
 	
 	/*
 	 * Getter Setter
@@ -41,16 +59,16 @@ public class Dream {
 	public void setTodo(String todo) {
 		this.todo = todo;
 	}
-	public float getLat() {
+	public double getLat() {
 		return lat;
 	}
-	public void setLat(float lat) {
+	public void setLat(double lat) {
 		this.lat = lat;
 	}
-	public float getLon() {
+	public double getLon() {
 		return lon;
 	}
-	public void setLon(float lon) {
+	public void setLon(double lon) {
 		this.lon = lon;
 	}
 	public String getLocation() {
@@ -65,16 +83,17 @@ public class Dream {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-	public boolean isCheck() {
+	
+	public Integer getCheck() {
 		return check;
 	}
-	public void setCheck(boolean check) {
+	public void setCheck(Integer check) {
 		this.check = check;
 	}
-	public boolean isNoti() {
+	public Integer getNoti() {
 		return noti;
 	}
-	public void setNoti(boolean noti) {
+	public void setNoti(Integer noti) {
 		this.noti = noti;
 	}
 	

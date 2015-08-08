@@ -4,27 +4,21 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.uni.unitonwanttoapp.db.MyDB;
+import com.uni.unitonwanttoapp.dto.Dream;
 
 public class MainActivity extends Activity {
 
 	private SQLiteDatabase database; 
-	
-	final int ONE = 0;
-    final int TWO = 1;
-    final int THREE = 2;
-    final int FOUR = 3;
-    final int FIVE = 4;
-    final int SIX = 5;
-    final int SEVEN = 6;
-    final int EIGHT = 7;
-    final int NINE = 8;
-    final int TEN = 9;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +28,7 @@ public class MainActivity extends Activity {
 		Button filterBtn = (Button)findViewById(R.id.filterButton);
 		Button addFtn = (Button)findViewById(R.id.addButton);
 		Button pushBtn = (Button)findViewById(R.id.pushButton);
+		Button gpsBtn = (Button)findViewById(R.id.gpsButton);
 		filterBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -59,17 +54,24 @@ public class MainActivity extends Activity {
 				startActivity(i);
 			}
 		});
+		gpsBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(MainActivity.this,AndroidGPSTrackingActivity.class);
+				startActivity(i);
+			}
+		});
 		
-	/*	MyDB my = new MyDB(this);
+		MyDB my = new MyDB(this);
 		Dream d = new Dream(1, "test", "test2", 123.123, 123.123,
-				"test3", "test4", "test5", 1,
-				0);
+				"test3", "test4", "test5", 1,0);
 		my.addDream(d);
-		Toast toast = Toast.makeText(getApplicationContext(),
-				   "토스트창에 출력될 문자", Toast.LENGTH_LONG);
+		/*Toast toast = Toast.makeText(getApplicationContext(),
+				my.getDream(0).getCategory(), Toast.LENGTH_LONG);
 				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
-		*/
+				toast.show();*/
+		
 		
 	}
 

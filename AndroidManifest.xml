@@ -59,6 +59,10 @@
             android:name=".CreateNotificationActivity"
             android:label="@string/title_activity_create_notification" >
         </activity>
+        <activity
+            android:name=".AndroidGPSTrackingActivity"
+            android:label="@string/title_activity_android_gpstracking" >
+        </activity>
     </application>
 
 </manifest>

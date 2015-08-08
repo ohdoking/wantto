@@ -22,5 +22,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="push" />
+     <Button
+        android:id="@+id/gpsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="gps" />
 
 </LinearLayout>

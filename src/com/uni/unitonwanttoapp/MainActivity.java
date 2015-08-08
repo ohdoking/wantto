@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,7 +14,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.uni.unitonwanttoapp.db.MyDB;
-import com.uni.unitonwanttoapp.db.MySQLiteHelper;
 import com.uni.unitonwanttoapp.dto.Dream;
 
 public class MainActivity extends Activity {
@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
 		Button filterBtn = (Button)findViewById(R.id.filterButton);
 		Button addFtn = (Button)findViewById(R.id.addButton);
 		Button pushBtn = (Button)findViewById(R.id.pushButton);
+		Button gpsBtn = (Button)findViewById(R.id.gpsButton);
 		filterBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -53,36 +54,51 @@ public class MainActivity extends Activity {
 				startActivity(i);
 			}
 		});
+		gpsBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(MainActivity.this,AndroidGPSTrackingActivity.class);
+				startActivity(i);
+			}
+		});
 		
-	/*	MyDB my = new MyDB(this);
+		MyDB my = new MyDB(this);
 		Dream d = new Dream(1, "test", "test2", 123.123, 123.123,
-				"test3", "test4", "test5", 1,
-				0);
+				"test3", "test4", "test5", 1,0);
 		my.addDream(d);
-		Toast toast = Toast.makeText(getApplicationContext(),
-				   "토스트창에 출력될 문자", Toast.LENGTH_LONG);
+		/*Toast toast = Toast.makeText(getApplicationContext(),
+				my.getDream(0).getCategory(), Toast.LENGTH_LONG);
 				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
-		*/
+				toast.show();*/
+		
 		
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+ 
+        return super.onCreateOptionsMenu(menu);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+	/**
+     * On selecting action bar icons
+     * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+        case R.id.action_search:
+            // search action
+            return true;
+        case R.id.action_location_found:
+            // location found
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 }

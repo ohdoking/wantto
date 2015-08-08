@@ -17,18 +17,13 @@ public class MyDB {
 
 	private SQLiteDatabase db;
 
-	public final static String EMP_TABLE = "MyEmployees"; // name of table
-
-	public final static String EMP_ID = "_id"; // id value for employee
-	public final static String EMP_NAME = "name"; // name of employee
-
 	/**
 	 * 
 	 * @param context
 	 */
 	public MyDB(Context context) {
 		dbHelper = new MySQLiteHelper(context);
-		db = dbHelper.getWritableDatabase();
+		
 	}
 
 	/**
@@ -47,7 +42,7 @@ public class MyDB {
 	private static final String KEY_LON = "lon";
 	private static final String KEY_LOCATION = "location";
 	private static final String KEY_MEMO = "memo";
-	private static final String KEY_CHECK = "check";
+	private static final String KEY_CHECK = "checked";
 	private static final String KEY_NOTI = "noti";
 	private static final String KEY_CATEGORY = "category";
 
@@ -59,7 +54,7 @@ public class MyDB {
 	public void addDream(Dream dream) {
 		Log.d("addBook", KEY_CATEGORY.toString());
 		// 1. get reference to writable DB
-
+		db = dbHelper.getWritableDatabase();
 		// 2. create ContentValues to add key "column"/value
 		ContentValues values = new ContentValues();
 
@@ -86,7 +81,7 @@ public class MyDB {
 	// Dream Table One GET by id
 	public Dream getDream(int id) {
 
-
+		db = dbHelper.getWritableDatabase();
 		// 2. build query
 		Cursor cursor = db.query(DREAM_TABLES, // a. table
 				COLUMNS, // b. column names
@@ -104,14 +99,15 @@ public class MyDB {
 		// 4. build book object
 		Dream dream = new Dream();
 		dream.setId(Integer.parseInt(cursor.getString(0)));
-		dream.setTodo(cursor.getString(1));
-		dream.setLat(Float.parseFloat(cursor.getString(2)));
-		dream.setLon(Float.parseFloat(cursor.getString(3)));
-		dream.setLocation(cursor.getString(4));
-		dream.setMemo(cursor.getString(5));
-		dream.setCheck(Integer.parseInt(cursor.getString(6)));
-		dream.setNoti(Integer.parseInt(cursor.getString(7)));
-		dream.setCategory(cursor.getString(8));
+		dream.setZone(cursor.getString(1));
+		dream.setTodo(cursor.getString(2));
+		dream.setLat(Float.parseFloat(cursor.getString(3)));
+		dream.setLon(Float.parseFloat(cursor.getString(4)));
+		dream.setLocation(cursor.getString(5));
+		dream.setMemo(cursor.getString(6));
+		dream.setCheck(Integer.parseInt(cursor.getString(7)));
+		dream.setNoti(Integer.parseInt(cursor.getString(8)));
+		dream.setCategory(cursor.getString(9));
 
 		Log.d("getDream(" + id + ")", dream.toString());
 
@@ -135,14 +131,15 @@ public class MyDB {
 			do {
 				dream = new Dream();
 				dream.setId(Integer.parseInt(cursor.getString(0)));
-				dream.setTodo(cursor.getString(1));
-				dream.setLat(Float.parseFloat(cursor.getString(2)));
-				dream.setLon(Float.parseFloat(cursor.getString(3)));
-				dream.setLocation(cursor.getString(4));
-				dream.setMemo(cursor.getString(5));
-				dream.setCheck(Integer.parseInt(cursor.getString(6)));
-				dream.setNoti(Integer.parseInt(cursor.getString(7)));
-				dream.setCategory(cursor.getString(8));
+				dream.setZone(cursor.getString(1));
+				dream.setTodo(cursor.getString(2));
+				dream.setLat(Float.parseFloat(cursor.getString(3)));
+				dream.setLon(Float.parseFloat(cursor.getString(4)));
+				dream.setLocation(cursor.getString(5));
+				dream.setMemo(cursor.getString(6));
+				dream.setCheck(Integer.parseInt(cursor.getString(7)));
+				dream.setNoti(Integer.parseInt(cursor.getString(8)));
+				dream.setCategory(cursor.getString(9));
 
 				// Add book to books
 				dreams.add(dream);
@@ -159,7 +156,7 @@ public class MyDB {
 	public int updateDream(Dream dream) {
 
 		// 1. get reference to writable DB
-
+		db = dbHelper.getWritableDatabase();
 		// 2. create ContentValues to add key "column"/value
 		ContentValues values = new ContentValues();
 		values.put(KEY_ZONE, dream.getZone());
@@ -189,7 +186,7 @@ public class MyDB {
 	public void deleteDream(Dream dream) {
 
 		// 1. get reference to writable DB
-
+		db = dbHelper.getWritableDatabase();
 		// 2. delete
 		db.delete(DREAM_TABLES, KEY_ID + " = ?",
 				new String[] { String.valueOf(dream.getId()) });

@@ -25,12 +25,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// SQL statement to create book table
+		// SQL statement to create book table	
 		String CREATE_BOOK_TABLE = "CREATE TABLE IF NOT EXISTS dreams ( "
 				+ "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "zone VARCHAR(100), "
 				+ "todo VARCHAR(100), " + "lat NUMERIC(10,5), " + "lon NUMERIC(10,5), "
 				+ "location VARCHAR(100), " + "memo VARCHAR(100), " + "checked INTEGER, "
-				+ "noti INTEGER,"+ "notification VARCHAR(100))";
+				+ "noti INTEGER,"+" category VARCHAR(100))";
 
 		// create books table
 		db.execSQL(CREATE_BOOK_TABLE);

@@ -509,27 +509,24 @@ containing a value of this type.
         public static final int what_icon=0x7f02002f;
     }
     public static final class id {
-        public static final int action_location_found=0x7f080037;
-        public static final int action_search=0x7f080036;
-        public static final int action_settings=0x7f080035;
+        public static final int action_location_found=0x7f080036;
+        public static final int action_search=0x7f080035;
+        public static final int action_settings=0x7f080034;
         public static final int addButton=0x7f080024;
         public static final int adjust_height=0x7f080001;
         public static final int adjust_width=0x7f080002;
+        public static final int alarmCb=0x7f080030;
         public static final int autocomplete_places=0x7f08002e;
+        public static final int backBtn=0x7f080026;
         public static final int book_now=0x7f080012;
-        public static final int button1=0x7f080026;
-        public static final int button2=0x7f080028;
-        public static final int button3=0x7f080033;
-        public static final int button4=0x7f080034;
         public static final int buyButton=0x7f08000e;
         public static final int buy_now=0x7f080013;
         public static final int buy_with_google=0x7f080014;
         public static final int cast_notification_id=0x7f080000;
-        public static final int checkBox1=0x7f080031;
         public static final int classic=0x7f080016;
+        public static final int deleteBtn=0x7f080033;
         public static final int donate_with_google=0x7f080015;
-        public static final int editText1=0x7f080027;
-        public static final int editText2=0x7f080032;
+        public static final int doneBtn=0x7f080032;
         public static final int filterButton=0x7f080023;
         public static final int filter_place=0x7f08001c;
         public static final int filter_word=0x7f08001b;
@@ -541,6 +538,7 @@ containing a value of this type.
         public static final int loc_seekbar=0x7f08001f;
         public static final int map=0x7f08002f;
         public static final int match_parent=0x7f080010;
+        public static final int memoEt=0x7f080031;
         public static final int monochrome=0x7f080018;
         public static final int none=0x7f080003;
         public static final int normal=0x7f080005;
@@ -550,12 +548,13 @@ containing a value of this type.
         public static final int push_btn=0x7f08001a;
         public static final int sandbox=0x7f08000b;
         public static final int satellite=0x7f080006;
+        public static final int saveBtn=0x7f080028;
         public static final int selectionDetails=0x7f08000f;
         public static final int slide=0x7f080019;
         public static final int strict_sandbox=0x7f08000c;
         public static final int terrain=0x7f080007;
         public static final int test=0x7f08000d;
-        public static final int textView1=0x7f080030;
+        public static final int todoEt=0x7f080027;
         public static final int toggleButton1=0x7f080029;
         public static final int toggleButton2=0x7f08002a;
         public static final int toggleButton3=0x7f08002b;

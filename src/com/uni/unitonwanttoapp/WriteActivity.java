@@ -29,15 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -53,12 +44,42 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.uni.unitonwanttoapp.activities.SampleActivityBase;
+import com.uni.unitonwanttoapp.db.MyDB;
+import com.uni.unitonwanttoapp.dto.Dream;
 import com.uni.unitonwanttoapp.write.PlaceAutocompleteAdapter;
 
-public class WriteActivity extends SampleActivityBase implements OnClickListener,GoogleApiClient.OnConnectionFailedListener {
-	
-	private ToggleButton t1,t2,t3,t4,t5;
-	
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
+public class WriteActivity extends SampleActivityBase
+		implements OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+
+	private Button saveBtn;
+	private EditText todoEt, memoEt;
+	private CheckBox alarmCb;
+	private ToggleButton t1, t2, t3, t4, t5;
+
+	private String zone, todo, location, memo, category;
+	private float lat, lon;
+	private int check, noti;
+
+	private int id;
+	SQLiteDatabase sqlDB;
+	myDBHelper myHelper;
+
 	/**
 	 * GoogleApiClient wraps our service connection to Google Play Services and
 	 * provides access to the user's sign in state as well as the Google's APIs.
@@ -72,7 +93,7 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 	private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(new LatLng(-34.041458, 150.790100),
 			new LatLng(-33.682247, 151.383362));
 
-	static final LatLng SEOUL = new LatLng( 37.56, 126.97); 
+	static final LatLng SEOUL = new LatLng(37.56, 126.97);
 	private GoogleMap map;
 
 	@Override
@@ -109,18 +130,71 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 				BOUNDS_GREATER_SYDNEY, null);
 		mAutocompleteView.setAdapter(mAdapter);
 
-		
 		t1 = (ToggleButton) findViewById(R.id.toggleButton1);
 		t2 = (ToggleButton) findViewById(R.id.toggleButton2);
 		t3 = (ToggleButton) findViewById(R.id.toggleButton3);
 		t4 = (ToggleButton) findViewById(R.id.toggleButton4);
 		t5 = (ToggleButton) findViewById(R.id.toggleButton5);
-		
+
 		t1.setOnClickListener(this);
 		t2.setOnClickListener(this);
 		t3.setOnClickListener(this);
 		t4.setOnClickListener(this);
 		t5.setOnClickListener(this);
+
+		myHelper = new myDBHelper(this);
+		sqlDB = myHelper.getReadableDatabase();
+		Cursor cursor; // db의 결과를 받을 수 있는 클래스(cursor)
+        cursor = sqlDB.rawQuery("select * from idTBL;", null);
+
+        while (cursor.moveToNext()) {
+           id = cursor.getInt(0); // 그룹 이름
+        }
+        cursor.close();
+        
+		saveBtn = (Button) findViewById(R.id.saveBtn);
+		saveBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+
+				todo = todoEt.getText().toString();
+				memo = memoEt.getText().toString();
+				if (t1.isChecked())
+					category = t1.getTextOn().toString();
+				else if (t2.isChecked())
+					category = t2.getTextOn().toString();
+				else if (t3.isChecked())
+					category = t3.getTextOn().toString();
+				else if (t4.isChecked())
+					category = t4.getTextOn().toString();
+				else if (t5.isChecked())
+					category = t5.getTextOn().toString();
+				if (alarmCb.isChecked())
+					noti = 1;
+				else
+					noti = 0;
+
+				MyDB my = new MyDB(getApplicationContext());
+				// Dream d = new Dream(1, "test", "test2", 123.123,
+				// 123.123,"test3", "test4", "test5", 1,0);
+				Dream d = new Dream(id++, zone, todo, lat, lon, location, memo, category, 0, noti);
+				my.addDream(d);
+				Toast.makeText(getApplicationContext(),id+" "+ zone + " " + " " + todo + " " + lat + " " + lon + " " + " "
+						+ location + " " + memo + " " + category + " " + check + " " + noti, Toast.LENGTH_LONG).show();
+				
+				sqlDB = myHelper.getWritableDatabase();
+				sqlDB.execSQL("insert into idTBL VALUES ('"+id+"');");
+				sqlDB.close();
+				
+			}
+		});
+
+		todoEt = (EditText) findViewById(R.id.todoEt);
+		memoEt = (EditText) findViewById(R.id.memoEt);
+		alarmCb = (CheckBox) findViewById(R.id.alarmCb);
+		
 		
 	}
 
@@ -189,8 +263,15 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 			 * thirdPartyAttribution.toString())); }
 			 */
 
-			String findAddress = place.getAddress().toString();
-			Marker seoul = map
+			location = place.getAddress().toString();
+			zone = location.substring(11, 14);
+
+			String latLng = place.getLatLng().toString();
+			String[] split = latLng.split(",");
+			lat = Float.parseFloat(split[0].substring(10, split[0].length()));
+			lon = Float.parseFloat(split[1].substring(0, split[1].length() - 1));
+
+			Marker mark = map
 					.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
 
 			map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 15));
@@ -233,14 +314,13 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 	}
 
 	/**
-	 * 주소로부터 위치정보 취득
-	 *  address 주소
+	 * 주소로부터 위치정보 취득 address 주소
 	 */
 	public static JSONObject getLocationInfo(String address) {
 
 		HttpGet httpGet = new HttpGet(
 				"http://maps.google.com/maps/api/geocode/json?address=" + address + "&ka&sensor=false");
-		
+
 		HttpClient client = new DefaultHttpClient();
 		HttpResponse response;
 		StringBuilder stringBuilder = new StringBuilder();
@@ -277,7 +357,7 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 		try {
 			lon = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
 					.getJSONObject("location").getDouble("lng");
-			
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -312,7 +392,7 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		switch(v.getId()){
+		switch (v.getId()) {
 		case R.id.toggleButton1:
 			t1.setChecked(true);
 			t2.setChecked(false);
@@ -321,7 +401,7 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 			t5.setChecked(false);
 			break;
 		case R.id.toggleButton2:
-			if(t1.isChecked() || t3.isChecked() || t4.isChecked() || t5.isChecked()){
+			if (t1.isChecked() || t3.isChecked() || t4.isChecked() || t5.isChecked()) {
 				t1.setChecked(false);
 				t2.setChecked(true);
 				t3.setChecked(false);
@@ -330,7 +410,7 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 			}
 			break;
 		case R.id.toggleButton3:
-			if(t1.isChecked() || t2.isChecked() || t4.isChecked() || t5.isChecked()){
+			if (t1.isChecked() || t2.isChecked() || t4.isChecked() || t5.isChecked()) {
 				t1.setChecked(false);
 				t2.setChecked(false);
 				t3.setChecked(true);
@@ -339,7 +419,7 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 			}
 			break;
 		case R.id.toggleButton4:
-			if(t1.isChecked() || t2.isChecked() || t3.isChecked() || t5.isChecked()){
+			if (t1.isChecked() || t2.isChecked() || t3.isChecked() || t5.isChecked()) {
 				t1.setChecked(false);
 				t2.setChecked(false);
 				t3.setChecked(false);
@@ -348,7 +428,7 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 			}
 			break;
 		case R.id.toggleButton5:
-			if(t1.isChecked() || t2.isChecked() || t3.isChecked() || t4.isChecked()){
+			if (t1.isChecked() || t2.isChecked() || t3.isChecked() || t4.isChecked()) {
 				t1.setChecked(false);
 				t2.setChecked(false);
 				t3.setChecked(false);
@@ -357,6 +437,26 @@ public class WriteActivity extends SampleActivityBase implements OnClickListener
 			}
 			break;
 		}
-		
+
 	}
+
+	public class myDBHelper extends SQLiteOpenHelper {
+		public myDBHelper(Context context) {
+			super(context, "idDB", null, 1);
+		}
+
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+			// TODO Auto-generated method stub
+			db.execSQL("create table idTBL (id INTEGER);");
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			// TODO Auto-generated method stub
+			db.execSQL("drop table if exists idTBL;"); // 이미 그룹테이블이 있으면 지운다.
+			onCreate(db); // 새로운 테이블을 만듦
+		}
+	}
+
 }

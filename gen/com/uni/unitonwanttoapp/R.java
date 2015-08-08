@@ -551,8 +551,8 @@ containing a value of this type.
     }
     public static final class string {
         public static final int accept=0x7f060002;
-        public static final int action_settings=0x7f06002e;
-        public static final int app_name=0x7f06002c;
+        public static final int action_settings=0x7f06002f;
+        public static final int app_name=0x7f06002d;
         /**  Brand name for Facebook [DO NOT TRANSLATE] 
          */
         public static final int auth_google_play_services_client_facebook_display_name=0x7f060007;
@@ -683,10 +683,11 @@ containing a value of this type.
         public static final int create_calendar_message=0x7f060005;
         public static final int create_calendar_title=0x7f060004;
         public static final int decline=0x7f060003;
-        public static final int hello_world=0x7f06002d;
+        public static final int google_key=0x7f06002c;
+        public static final int hello_world=0x7f06002e;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
-        public static final int title_activity_filter_acitivy=0x7f06002f;
+        public static final int title_activity_filter_acitivy=0x7f060030;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */

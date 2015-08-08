@@ -30,7 +30,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 				+ "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "zone TEXT, "
 				+ "todo TEXT, " + "lat NUMERIC, " + "lon NUMERIC, "
 				+ "location TEXT, " + "memo TEXT, " + "check NUMERIC, "
-				+ "noti NUMERIC )";
+				+ "noti NUMERIC,"+ "notification TEXT)";
 
 		// create books table
 		db.execSQL(CREATE_BOOK_TABLE);
@@ -65,21 +65,30 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String KEY_MEMO = "memo";
 	private static final String KEY_CHECK = "check";
 	private static final String KEY_NOTI = "noti";
+	private static final String KEY_CATEGORY = "category";
 
 	private static final String[] COLUMNS = { KEY_ID, KEY_ZONE, KEY_TODO,
-			KEY_LAT, KEY_LON, KEY_LOCATION, KEY_MEMO, KEY_CHECK, KEY_NOTI };
+			KEY_LAT, KEY_LON, KEY_LOCATION, KEY_MEMO, KEY_CHECK, KEY_NOTI,KEY_CATEGORY };
 
-	public void addBook(Dream book) {
-		Log.d("addBook", book.toString());
+	// Dream Table ALL ADD
+	public void addDream(Dream dream) {
+		Log.d("addBook", KEY_CATEGORY.toString());
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		// 2. create ContentValues to add key "column"/value
 		ContentValues values = new ContentValues();
-		/*
-		 * values.put(KEY_ZONE, book.getTitle()); // get title
-		 * values.put(KEY_AUTHOR, book.getAuthor()); // get author
-		 */
+		
+		values.put(KEY_ZONE, dream.getZone()); 
+		values.put(KEY_TODO, dream.getTodo()); 
+		values.put(KEY_LAT, dream.getLat()); 
+		values.put(KEY_LON, dream.getLon()); 
+		values.put(KEY_LOCATION, dream.getLocation()); 
+		values.put(KEY_MEMO, dream.getMemo()); 
+		values.put(KEY_CHECK, dream.isCheck()); 
+		values.put(KEY_NOTI, dream.isNoti()); 
+		values.put(KEY_CATEGORY, dream.getCategory()); 
+		 
 		// 3. insert
 		db.insert(DREAM_TABLES, // table
 				null, // nullColumnHack
@@ -89,7 +98,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		// 4. close
 		db.close();
 	}
-
+	
+	// Dream Table One GET by id
 	public Dream getBook(int id) {
 
 		// 1. get reference to readable DB
@@ -110,19 +120,27 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 
 		// 4. build book object
-		Dream book = new Dream();
-		book.setId(Integer.parseInt(cursor.getString(0)));
+		Dream dream = new Dream();
+		dream.setId(Integer.parseInt(cursor.getString(0)));
+		dream.setTodo(cursor.getString(1));
+		dream.setLat(Float.parseFloat(cursor.getString(2)));
+		dream.setLon(Float.parseFloat(cursor.getString(3)));
+		dream.setLocation(cursor.getString(4));
+		dream.setMemo(cursor.getString(5));
+		dream.setCheck(Boolean.parseBoolean(cursor.getString(6)));
+		dream.setNoti(Boolean.parseBoolean(cursor.getString(7)));
+		dream.setCategory(cursor.getString(8));
 		
 
-		Log.d("getBook(" + id + ")", book.toString());
+		Log.d("getDream(" + id + ")", dream.toString());
 
 		// 5. return book
-		return book;
+		return dream;
 	}
 
 	// Get All Books
 	public List<Dream> getAllBooks() {
-		List<Dream> books = new LinkedList<Dream>();
+		List<Dream> dreams = new LinkedList<Dream>();
 
 		// 1. build the query
 		String query = "SELECT  * FROM " + DREAM_TABLES;
@@ -132,39 +150,53 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.rawQuery(query, null);
 
 		// 3. go over each row, build book and add it to list
-		Dream book = null;
+		Dream dream = null;
 		if (cursor.moveToFirst()) {
 			do {
-				book = new Dream();
-				book.setId(Integer.parseInt(cursor.getString(0)));
+				dream = new Dream();
+				dream.setId(Integer.parseInt(cursor.getString(0)));
+				dream.setTodo(cursor.getString(1));
+				dream.setLat(Float.parseFloat(cursor.getString(2)));
+				dream.setLon(Float.parseFloat(cursor.getString(3)));
+				dream.setLocation(cursor.getString(4));
+				dream.setMemo(cursor.getString(5));
+				dream.setCheck(Boolean.parseBoolean(cursor.getString(6)));
+				dream.setNoti(Boolean.parseBoolean(cursor.getString(7)));
+				dream.setCategory(cursor.getString(8));
 
 				// Add book to books
-				books.add(book);
+				dreams.add(dream);
 			} while (cursor.moveToNext());
 		}
 
-		Log.d("getAllBooks()", books.toString());
+		Log.d("getAllBooks()", dreams.toString());
 
 		// return books
-		return books;
+		return dreams;
 	}
 
 	// Updating single book
-	public int updateBook(Dream book) {
+	public int updateBook(Dream dream) {
 
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		// 2. create ContentValues to add key "column"/value
 		ContentValues values = new ContentValues();
-		/*values.put("title", book.getTitle()); // get title
-		values.put("author", book.getAuthor()); // get author
-*/
+		values.put(KEY_ZONE, dream.getZone()); 
+		values.put(KEY_TODO, dream.getTodo()); 
+		values.put(KEY_LAT, dream.getLat()); 
+		values.put(KEY_LON, dream.getLon()); 
+		values.put(KEY_LOCATION, dream.getLocation()); 
+		values.put(KEY_MEMO, dream.getMemo()); 
+		values.put(KEY_CHECK, dream.isCheck()); 
+		values.put(KEY_NOTI, dream.isNoti()); 
+		values.put(KEY_CATEGORY, dream.getCategory()); 
 		// 3. updating row
 		int i = db.update(DREAM_TABLES, // table
 				values, // column/value
 				KEY_ID + " = ?", // selections
-				new String[] { String.valueOf(book.getId()) }); // selection
+				new String[] { String.valueOf(dream.getId()) }); // selection
 																// args
 
 		// 4. close
@@ -175,19 +207,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 
 	// Deleting single book
-	public void deleteBook(Dream book) {
+	public void deleteBook(Dream dream) {
 
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		// 2. delete
 		db.delete(DREAM_TABLES, KEY_ID + " = ?",
-				new String[] { String.valueOf(book.getId()) });
+				new String[] { String.valueOf(dream.getId()) });
 
 		// 3. close
 		db.close();
 
-		Log.d("deleteBook", book.toString());
+		Log.d("deleteBook", dream.toString());
 
 	}
 }

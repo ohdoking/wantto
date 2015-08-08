@@ -9,6 +9,7 @@ public class Dream {
 	float lon;
 	String location;
 	String memo;
+	String category;
 	boolean check;
 	boolean noti;
 	
@@ -16,6 +17,12 @@ public class Dream {
 	/*
 	 * Getter Setter
 	 */
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
 	public Integer getId() {
 		return id;
 	}

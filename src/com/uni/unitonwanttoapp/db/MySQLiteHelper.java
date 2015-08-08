@@ -100,7 +100,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 	
 	// Dream Table One GET by id
-	public Dream getBook(int id) {
+	public Dream getDream(int id) {
 
 		// 1. get reference to readable DB
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -139,7 +139,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 
 	// Get All Books
-	public List<Dream> getAllBooks() {
+	public List<Dream> getAllDreams() {
 		List<Dream> dreams = new LinkedList<Dream>();
 
 		// 1. build the query
@@ -176,7 +176,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 
 	// Updating single book
-	public int updateBook(Dream dream) {
+	public int updateDream(Dream dream) {
 
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -207,7 +207,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 
 	// Deleting single book
-	public void deleteBook(Dream dream) {
+	public void deleteDream(Dream dream) {
 
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
